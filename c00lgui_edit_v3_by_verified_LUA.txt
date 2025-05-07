@@ -1,0 +1,54 @@
+local msg = Instance.new("Message", workspace)
+msg.Text = "c00lgui Reborn V0.5 has loaded"
+wait(5.8)
+msg:Destroy()
+local player = game:GetService("Players").LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- Executa o c00lgui 1 segundo antes
+task.spawn(function()
+    task.wait(1)
+    loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Test-c00lgui-edit-v3-by-verified-32288"))()
+end)
+
+-- Aguarda o culgui ser adicionado ao PlayerGui
+local gui
+repeat
+    task.wait(0.1)
+    gui = playerGui:FindFirstChild("culgui")
+until gui and gui:IsA("ScreenGui")
+
+gui.ResetOnSpawn = false -- Impede que desapareรงa ao morrer
+
+-- Tornar o Frame dentro do culgui movvel
+local frame = gui:FindFirstChildWhichIsA("Frame")
+
+if frame then
+    local dragging
+    local dragStart
+    local startPos
+
+    local function onInputBegan(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = frame.Position
+
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end
+
+    local function onInputChanged(input)
+        if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+            local delta = input.Position - dragStart
+            frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        end
+    end
+
+    frame.InputBegan:Connect(onInputBegan)
+    frame.InputChanged:Connect(onInputChanged)
+end
