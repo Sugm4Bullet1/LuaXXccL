@@ -1,0 +1,42 @@
+local ServerStorage = game:GetService("ServerStorage")
+local Debris = game:GetService("Debris")
+
+local function createHead()
+    local head = Instance.new("Part")
+    head.Size = Vector3.new(2, 2, 2)
+    head.Shape = Enum.PartType.Ball
+    head.Material = Enum.Material.SmoothPlastic
+    head.BrickColor = BrickColor.new("Bright red")
+    head.TopSurface = Enum.SurfaceType.Smooth
+    head.BottomSurface = Enum.SurfaceType.Smooth
+    
+    local mesh = Instance.new("SpecialMesh")
+    mesh.MeshType = Enum.MeshType.Head
+    mesh.Scale = Vector3.new(1.2, 1.2, 1.2)
+    mesh.Parent = head
+    
+    local face = Instance.new("Decal")
+    face.Texture = "rbxasset://textures/face.png"
+    face.Parent = head
+    
+    return head
+end
+
+local function rainHeads()
+    while true do
+        wait(0.5)
+        
+        local head = createHead()
+        head.Position = Vector3.new(math.random(-100, 100), 100, math.random(-100, 100))
+        head.Parent = game.Workspace
+        
+        local velocity = Instance.new("BodyVelocity")
+        velocity.Velocity = Vector3.new(0, -50, 0)
+        velocity.MaxForce = Vector3.new(1000, 1000, 1000)
+        velocity.Parent = head
+        
+        Debris:AddItem(head, 10)
+    end
+end
+
+spawn(rainHeads)
